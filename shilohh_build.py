@@ -62,6 +62,7 @@ download_dir = os.getcwd()
 
 os.system("clear")
 
+
 # Filter brcm files according to macOS version
 def filter_brcm(os_version, files_in_zip):
     brcm = ["BrcmFirmwareRepo"]
