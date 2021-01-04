@@ -60,6 +60,7 @@ bootloaders = [
 # Set working directory
 download_dir = os.getcwd()
 
+os.system("clear")
 
 # Filter brcm files according to macOS version
 def filter_brcm(os_version, files_in_zip):
@@ -143,7 +144,9 @@ def github_latest_release_url(url, bt_adapter):
 
 # Set motherboard
 #
-print("\nWhich motherboard are you using?")
+print(
+    "\nWhich " + textstyle.BOLD +
+    "motherboard " + textstyle.END + "are you using?\n")
 print(
     "[" + textstyle.BOLD + "1" + textstyle.END + "]\t" +
     "Rampage IV Extreme (R4E)")
@@ -154,12 +157,13 @@ print(
 mb_type = None
 
 while mb_type is None:
+    print("")
     set_mb = raw_input("type 1 or 2:\t")
     if set_mb == "1":
         mb_type = "R4E"
         print(
             "\nDo you need " + textstyle.BOLD + "bluetooth " +
-            textstyle.END + "(bluetooth adapter) support?")
+            textstyle.END + "(bluetooth adapter) support?\n")
         bt_adapter = None
         while bt_adapter is None:
             set_bt_adapter = raw_input("(y/n):\t")
@@ -177,7 +181,9 @@ while mb_type is None:
 
 # Set macOS version
 #
-print("\nWhich macOS version do you need files for?")
+print(
+    "\nWhich " + textstyle.BOLD + "macOS " + textstyle.END +
+    "version do you need files for?\n")
 print(
     "[" + textstyle.BOLD + "1" + textstyle.END + "]\t" +
     "10.10 or earlier")
@@ -191,6 +197,7 @@ print(
 os_version = None
 
 while os_version is None:
+    print("")
     set_os = raw_input("type 1, 2 or 3:\t")
     if set_os == "1":
         os_version = "10.10"
@@ -204,17 +211,22 @@ while os_version is None:
 
 # Ask for bootloader
 #
-print("\nDo you want to include a Bootloader?")
+print(
+    "\nDo you want to include a " +
+    textstyle.BOLD + "Bootloader" + textstyle.END + "?")
 
 bootloader = None
 
 while bootloader is None:
+    print("")
     ask_bootloader = raw_input("(y/n):\t")
     # Set bootloader
     if ask_bootloader == "y":
         bootloader = True
         # Ask which bootloader
-        print("\nWhich bootloader do you want to use?")
+        print(
+            "\nWhich " + textstyle.BOLD + "bootloader" + textstyle.END +
+            " do you want to use?\n")
         print(
             "[" + textstyle.BOLD + "1" + textstyle.END + "]\t" +
             "OpenCore")
@@ -225,6 +237,7 @@ while bootloader is None:
         b_type = None
 
         while b_type is None:
+            print("")
             set_b = raw_input("type 1 or 2:\t")
             if set_b == "1":
                 b_type = "OpenCore"
@@ -381,6 +394,9 @@ if bootloader is not None:
         print(
             "For OpenCore installation instructions, visit: " +
             textstyle.RED +
-            "https://dortania.github.io/OpenCore-Install-Guide/" +
-            "installer-guide/opencore-efi.html\n" +
+            "https://bit.ly/3hEc3Aw\n" +
             textstyle.END)
+print(
+    "Use the original guide by Shilohh for reference: " +
+    textstyle.RED + "https://bit.ly/3bcA14u\n" + textstyle.END
+)
