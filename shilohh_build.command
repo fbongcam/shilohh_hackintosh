@@ -21,13 +21,16 @@ non_standard_modules = ['requests']
 # Check non standard modules
 for module in non_standard_modules:
     try:
-        imp.find_module(module)
+        if imp.find_module(module):
+            __import__(module, globals(), locals(), fromlist=[], level=-1)
     except ImportError:
-        print("Missing module\t" + module)
-        print("Downloading " + textstyle.BOLD + module + textstyle.END + "...")
+        print("\nMissing module\t" + module)
+        print(
+            "\nDownloading " + textstyle.BOLD + module + textstyle.END + "...")
         subprocess.call(
             "python -m pip install " + module, shell=True)
         __import__(module, globals(), locals(), fromlist=[], level=-1)
+
 # Set working directory
 download_dir = os.getcwd()
 

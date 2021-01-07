@@ -21,7 +21,8 @@ non_standard_modules = ['requests']
 # Check non standard modules
 for module in non_standard_modules:
     try:
-        imp.find_module(module)
+        if imp.find_module(module):
+            __import__(module, globals(), locals(), fromlist=[], level=-1)
     except ImportError:
         print("\nMissing module\t" + module)
         print(
