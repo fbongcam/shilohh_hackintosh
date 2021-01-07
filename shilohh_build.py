@@ -115,6 +115,16 @@ def filter_brcm(os_version, files_in_zip):
         return list(files_a - files_b)
 
 
+def filter_intel_mausi(files_in_zip):
+    files_to_exclude = []
+    for item in files_in_zip:
+        if 'Snow' in item:
+            files_to_exclude.append(item)
+    files_a = set(files_in_zip)
+    files_b = set(files_to_exclude)
+    return list(files_a - files_b)
+
+
 def downloader(filename, file_url):
     file = sys.modules['requests'].get(file_url, stream=True, timeout=5)
     print(
@@ -371,6 +381,9 @@ for f in os.listdir(download_dir):
                     if "Brcm" in f:
                         # Filter Brcm files
                         files_in_zip = filter_brcm(os_version, files_in_zip)
+                    if "IntelMausi" in f:
+                        # Filter IntelMausi files
+                        files_in_zip = filter_intel_mausi(files_in_zip)
                     enumerated_list = list(enumerate(files_in_zip))
                     for index, file in enumerated_list:
                         if "Debug" not in file:
