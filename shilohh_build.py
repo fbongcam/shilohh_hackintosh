@@ -1,16 +1,33 @@
+import sys
 import os
 from os import path
-import shutil
-import requests
 import subprocess
+import shutil
 import zipfile
 from zipfile import ZipFile
+import imp
 
 
 class textstyle:
     RED = '\033[91m'
     BOLD = '\033[1m'
     END = '\033[0m'
+
+
+non_standard_modules = ['requests']
+
+# Check non standard modules
+for module in non_standard_modules:
+    try:
+        imp.find_module(module)
+    except ImportError:
+        print("Missing module\t" + module)
+        print("Downloading " + textstyle.BOLD + module + textstyle.END + "...")
+        subprocess.call(
+            "python -m pip install " + module, shell=True)
+        __import__(module, globals(), locals(), fromlist=[], level=-1)
+# Set working directory
+download_dir = os.getcwd()
 
 
 # .kexts
@@ -57,8 +74,6 @@ bootloaders = [
     "CloverHackyColor/CloverBootloader/releases/latest"
 ]
 
-# Set working directory
-download_dir = os.getcwd()
 
 os.system("clear")
 
@@ -96,7 +111,7 @@ def filter_brcm(os_version, files_in_zip):
 
 
 def downloader(filename, file_url):
-    file = requests.get(file_url, stream=True, timeout=5)
+    file = sys.modules['requests'].get(file_url, stream=True, timeout=5)
     print(
         textstyle.BOLD + u"\N{HEAVY CHECK MARK}" +
         textstyle.END + "\t" + filename)
@@ -111,7 +126,7 @@ def github_latest_release_url(url, bt_adapter):
     if "BrcmPatchRAM" in url:
         if bt_adapter is False:
             return False
-    request = requests.get(url)
+    request = sys.modules['requests'].get(url)
     json_data = request.json()
     if "github" in url:
         filename = json_data["assets"][1]["name"]
@@ -251,7 +266,7 @@ while bootloader is None:
         break
 
 # Clear terminal window
-os.system("clear")
+# os.system("clear")
 print(textstyle.BOLD + "\nDownloading files..." + textstyle.END)
 
 # Download HFS-Driver
@@ -312,11 +327,13 @@ print(
 
 # Create folder kexts
 kexts_folder = "kexts"
-if path.exists(os.path.join(download_dir, kexts_folder)):
+if path.exists(
+        os.path.join(download_dir, kexts_folder)):
     int = 1
     while True:
         kexts_folder = "kexts" + "(" + str(int) + ")"
-        if path.exists(os.path.join(download_dir, kexts_folder)):
+        if path.exists(os.path.join(
+                download_dir, kexts_folder)):
             int += 1
             continue
         else:
@@ -337,7 +354,8 @@ for f in os.listdir(download_dir):
                     if not path.exists(os.path.join(
                         download_dir, "OpenCore-{}".format(
                             opencore_version))):
-                        os.mkdir("OpenCore-{}".format(opencore_version))
+                        os.mkdir("OpenCore-{}".format(
+                            opencore_version))
                         zip.extractall(
                             os.path.join(
                                 download_dir, "OpenCore-{}".format(
@@ -354,18 +372,22 @@ for f in os.listdir(download_dir):
                             if ".kext/" in file:
                                 zip.extract(
                                     file,
-                                    os.path.join(download_dir, kexts_folder))
+                                    os.path.join(
+                                        download_dir, kexts_folder))
                 # Delete archive
                 os.remove(f)
 
 # Move files out of folders
 print("Organizing files...")
-for file in os.listdir(os.path.join(download_dir, kexts_folder)):
+for file in os.listdir(os.path.join(
+        download_dir, kexts_folder)):
     if ".kext" not in file:
-        dir_path = os.path.join(download_dir, kexts_folder, file)
+        dir_path = os.path.join(
+            download_dir, kexts_folder, file)
         for kext_files in os.listdir(dir_path):
-            abspath = os.path.abspath(os.path.join(
-                download_dir, kexts_folder, file, kext_files))
+            abspath = os.path.abspath(
+                os.path.join(
+                    download_dir, kexts_folder, file, kext_files))
             shutil.move(abspath, abspath.replace(file, ""))
         # Remove empty folders
         os.rmdir(dir_path)
@@ -373,8 +395,10 @@ for file in os.listdir(os.path.join(download_dir, kexts_folder)):
 # Make extracted kexts executable
 print("Making files executable...")
 if os.path.join(download_dir, "HFSPlus-64.efi"):
-    os.chmod(os.path.join(download_dir, "HFSPlus-64.efi"), 0o775)
-for f in os.listdir(os.path.join(download_dir, kexts_folder)):
+    os.chmod(os.path.join(
+        download_dir, "HFSPlus-64.efi"), 0o775)
+for f in os.listdir(os.path.join(
+        download_dir, kexts_folder)):
     if ".kext" in f:
         if "FakeSMC_" in f:
             os.chmod(os.path.join(
