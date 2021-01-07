@@ -1,3 +1,5 @@
+## Shilohh Hackintosh Builder
+
 This script should enable you to just drag and drop all the files in their corresponding folders within you bootloader.
 You choose your motherboard etc and the script will gather the files for you.
 
